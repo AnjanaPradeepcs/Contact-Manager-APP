@@ -1,20 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+
+const SuccessPopup = ({ message, onClose }) => {
+  return (
+    <div className="success-popup">
+      <div className="success-popup-content">
+        <p>{message}</p>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
 
 class AddContact extends React.Component {
   state = {
     name: "",
     email: "",
+    showSuccess: false,
   };
 
   add = (e) => {
     e.preventDefault();
     if (this.state.name === "" || this.state.email === "") {
-      alert("ALl the fields are mandatory!");
+      alert("All the fields are mandatory!");
       return;
     }
     this.props.addContactHandler(this.state);
-    this.setState({ name: "", email: "" });
+    this.setState({ name: "", email: "", showSuccess: true });
   };
+
+  handleCloseSuccess = () => {
+    this.setState({ showSuccess: false });
+  };
+
   render() {
     return (
       <div className="ui main">
@@ -42,6 +59,12 @@ class AddContact extends React.Component {
           </div>
           <button className="ui button blue">Add</button>
         </form>
+        {this.state.showSuccess && (
+          <SuccessPopup
+            message="Contact added successfully!"
+            onClose={this.handleCloseSuccess}
+          />
+        )}
       </div>
     );
   }
